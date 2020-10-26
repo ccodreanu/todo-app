@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-const element = <h1>hi</h1>
+// components
+import TodoContainer from "./components/TodoContainer"
 
-ReactDOM.render(element, document.getElementById("root"))
+ReactDOM.render(<TodoContainer />, document.getElementById("root"))
