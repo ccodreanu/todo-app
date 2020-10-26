@@ -1,4 +1,5 @@
 import React from "react"
+import axios from "axios"
 import { v4 as uuidv4 } from "uuid"
 
 import Header from "./Header"
@@ -28,25 +29,39 @@ class TodoContainer extends React.Component {
   }
 
   deleteTodo = id => {
-    this.setState({
-      todos: [
-        ...this.state.todos.filter(todo => {
-          return todo.id !== id;
+    axios
+      .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(response =>
+        this.setState({
+          todos: [
+            ...this.state.todos.filter(todo => {
+              return todo.id !== id
+            })
+          ]
         })
-      ]
-    })
+      )
   }
 
   addTodo = title => {
-    const newTodo = {
-      id: uuidv4(),
-      title: title,
-      completed: false
-    }
+    axios
+      .post("https://jsonplaceholder.typicode.com/todos", {
+        title: title,
+        completed: false,
+      })
+      .then(response =>
+        this.setState({
+          todos: [...this.state.todos, response.data]
+        })
+      )
+  }
 
-    this.setState({
-      todos: [...this.state.todos, newTodo]
+  componentDidMount() {
+    axios.get("https://jsonplaceholder.typicode.com/todos", {
+      params: {
+        _limit: 10
+      }
     })
+      .then(response => this.setState({ todos: response.data }))
   }
 
   render() {
